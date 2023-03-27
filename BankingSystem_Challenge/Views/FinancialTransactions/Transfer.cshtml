@@ -1,0 +1,83 @@
+﻿@model BankingSystem_Challenge.ViewModels.VerifyAccount;
+@{
+    ViewData["Title"] = "Transfer";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h4>Transfer </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="FinancialTransactions" asp-action="TransferMoney" method="post">
+                        <input type="hidden" asp-for="FromName" />
+                        <input type="hidden" asp-for="FromIban" />
+                        <input type="hidden" asp-for="ToName" />
+                        <input type="hidden" asp-for="ToIBAN" />
+                        <input type="hidden" asp-for="Balance" />
+                        <input type="hidden" asp-for="Amount" />
+                        <input type="hidden" asp-for="Fee" />
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    From
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>@Model.FromName</strong><br />
+                                    @Model.FromIban
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    To
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>@Model.ToName</strong><br />
+                                    @Model.ToIBAN
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    Amount
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>@Model.Amount.ToString("0.00")</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    Fee
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>@Model.Fee.ToString("0.00")</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Confirm
+                            </button>
+                        </div>
+                    </form>
+                    <div class="row mt-3 text-center">
+                        <a asp-action="Verify" asp-controller="FinancialTransactions">
+                            <i class="bi bi-chevron-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+﻿@model BankingSystem_Challenge.ViewModels.CreateAccountViewModel;
+@{
+    ViewData["Title"] = "Create Account";
+    Layout = null;
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h4>Create Account</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Account" asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group my-2">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Username" class="control-label"></label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="PasswordAgain" class="control-label"></label>
+                            <input asp-for="PasswordAgain" class="form-control" />
+                            <span asp-validation-for="PasswordAgain" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for=" Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="DateOfBirth" class="control-label"></label>
+                            <input type="date" class="form-control" asp-for="DateOfBirth" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Country" class="control-label"></label>
+                            <select asp-for="Country" class="form-control" asp-items="ViewBag.CountriesLists" id="ddlCountry">
+                                <option value="0"> -- Country -- </option>
+                            </select>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <label asp-for="IBAN" class="control-label"></label>
+                                    <input asp-for="IBAN" class="form-control" />
+                                    <span asp-validation-for="IBAN" class="text-danger"></span>
+                                </div>
+                                <div class="col-4 mt-4">
+                                    <a class="btn btn-secondary" onclick="GoToGenerateIBAN();">Go To Generate IBAN</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="AccountType" class="control-label"></label>
+                            <select asp-for="AccountType" class="form-control" asp-items="ViewBag.AccountTypeLists">
+                                <option value="0"> -- Account Type -- </option>
+                            </select>
+                            <span asp-validation-for="AccountType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group my-2">
+                            <label asp-for="Balance" class="control-label"></label>
+                            <input type="number" class="form-control" asp-for="Balance" />
+                            <span asp-validation-for="Balance" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-3 text-center">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                        <div class="form-group mt-3 text-center">
+                            <a asp-controller="Account" asp-action="Login">Back to Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous">
+<link href="~/css/site.css" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function GoToGenerateIBAN()
+    {
+        debugger;
+        var country = $("#ddlCountry option:selected").text();
+
+        window.open('http://randomiban.com/?country=' + country, '_blank');
+    }
+</script>
