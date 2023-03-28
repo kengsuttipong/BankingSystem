@@ -90,6 +90,7 @@ namespace BankingSystem_Challenge.Controllers
                         AccountType = model.AccountType,
                         Balance = model.Balance,
                         DateCreated = DateTime.Now,
+                        Passcode = model.Passcode,
                     };
 
                     _context.Add(account);

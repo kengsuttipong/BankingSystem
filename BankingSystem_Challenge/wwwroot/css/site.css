@@ -23,3 +23,19 @@ body {
     margin-bottom: 60px;
     font-family: Montserrat !important;
 }
+
+.keypad-button {
+    width: 33.3333%;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.keypad-button:hover {
+    background-color: #f0f0f0;
+}
+
+.hide {
+    display: none;
+}

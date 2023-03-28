@@ -53,5 +53,9 @@ namespace BankingSystem_Challenge.ViewModels
         [Required]
         public double Balance { get; set; }
 
+        [Required]
+        [StringLength(6, MinimumLength = 6, ErrorMessage = "The code must be exactly 6 digits.")]
+        public string Passcode { get; set; }
+
     }
 }

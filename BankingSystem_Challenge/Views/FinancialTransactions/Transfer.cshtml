@@ -66,9 +66,13 @@
                         </div>
                         <hr />
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" id="submitForm" style="display: none;"></button>
+                            <button type="button" class="btn btn-primary" onclick="GetModalPopup()">
                                 <i class="bi bi-check-circle"></i> Confirm
                             </button>
+                        </div>
+                        <div class="row text-center InvalidPasscode hide mt-3">
+                            <span class="text-danger">Passcode is invalid</span>
                         </div>
                     </form>
                     <div class="row mt-3 text-center">
@@ -81,3 +85,118 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="passcodeModal" tabindex="-1" aria-labelledby="passcodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passcodeModalLabel">Enter Your Passcode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="password" id="passcode" class="form-control mb-3" pattern="\d{6}" maxlength="6" placeholder="Enter your 6-digit passcode" required>
+                <div id="keypad" class="row"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="hidPasscode"/>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const keypad = $("#keypad");
+        const passcode = $("#passcode");
+
+        for (let i = 1; i <= 9; i++) {
+            keypad.append(`<div class="keypad-button col" data-value="${i}">${i}</div>`);
+            if (i % 3 === 0) {
+                keypad.append('<div class="w-100"></div>');
+            }
+        }
+
+        keypad.append('<div class="keypad-button col" data-value="0">0</div>');
+        keypad.append('<div class="keypad-button col" data-value="clear">Clear</div>');
+        keypad.append('<button class="btn btn-primary" onclick=SavePasscode();>Submit</button>');
+
+        $(".keypad-button").on("click", function () {
+            const value = $(this).data("value");
+
+            if (value === "clear") {
+                passcode.val("");
+            } else {
+                if (passcode.val().length < 6) {
+                    passcode.val(passcode.val() + value);
+                }
+
+                if (passcode.val().length === 6) {
+                    $('#hidPasscode').val(passcode.val());
+                }
+            }
+        });
+    });
+
+    const passwordField = document.getElementById('passcode');
+
+    passwordField.addEventListener('input', function (event) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    passwordField.addEventListener('keydown', function (event) {
+        if (
+            event.key === 'Backspace' ||
+            event.key === 'Delete' ||
+            event.key === 'ArrowUp' ||
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowLeft' ||
+            event.key === 'ArrowRight' ||
+            (event.key >= '0' && event.key <= '9')
+        ) {
+            return;
+        }
+        event.preventDefault();
+    });
+
+    function GetModalPopup() {
+        $('#passcodeModal').modal('show');
+    }
+
+    function SavePasscode() {
+        $.ajax({
+            url: '/api/Data/CheckPasscode',
+            type: 'GET',
+            data: { 'passcode': $('#hidPasscode').val() },
+            dataType: 'json',
+            success: function (response) {
+                var data = response.isSuccess;
+                alert(data);
+
+                if (data) {
+                    $('.InvalidPasscode').addClass('hide');
+                    $('#submitForm').click();
+                }
+                else
+                {
+                    $('#passcodeModal').modal('hide');
+                    $('.InvalidPasscode').removeClass('hide');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error: ' + textStatus + ' ' + errorThrown);
+            }
+        });
+    }
+</script>
+
+<style type="text/css">
+    .keypad-button {
+        width: 33.3333%;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .keypad-button:hover {
+        background-color: #f0f0f0;
+    }
+</style>

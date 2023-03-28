@@ -14,6 +14,7 @@
                 <div class="card-body">
                     <form asp-controller="Account" asp-action="Register" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" id="hidPasscode" asp-for="Passcode"/>
                         <div class="form-group my-2">
                             <label asp-for="FirstName" class="control-label"></label>
                             <input asp-for="FirstName" class="form-control" />
@@ -91,13 +92,28 @@
                             <span asp-validation-for="Balance" class="text-danger"></span>
                         </div>
                         <div class="form-group mt-3 text-center">
-                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <input type="submit" style="display: none;" id="submitForm" />
+                            <input type="button" value="Create" class="btn btn-primary" id="submitForm" onclick="GetModalPopup();" />
                         </div>
                         <div class="form-group mt-3 text-center">
                             <a asp-controller="Account" asp-action="Login">Back to Login</a>
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="passcodeModal" tabindex="-1" aria-labelledby="passcodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passcodeModalLabel">Enter Your Passcode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="password" id="passcode" class="form-control mb-3" pattern="\d{6}" maxlength="6" placeholder="Save your 6-digit passcode" required>
+                <div id="keypad" class="row"></div>
             </div>
         </div>
     </div>
@@ -122,9 +138,84 @@
 <script type="text/javascript">
     function GoToGenerateIBAN()
     {
-        debugger;
         var country = $("#ddlCountry option:selected").text();
 
         window.open('http://randomiban.com/?country=' + country, '_blank');
     }
+
+    $(document).ready(function () {
+        const keypad = $("#keypad");
+        const passcode = $("#passcode");
+
+        for (let i = 1; i <= 9; i++) {
+            keypad.append(`<div class="keypad-button col" data-value="${i}">${i}</div>`);
+            if (i % 3 === 0) {
+                keypad.append('<div class="w-100"></div>');
+            }
+        }
+
+        keypad.append('<div class="keypad-button col" data-value="0">0</div>');
+        keypad.append('<div class="keypad-button col" data-value="clear">Clear</div>');
+        keypad.append('<button class="btn btn-primary" onclick=SavePasscode();>Submit</button>');
+
+        $(".keypad-button").on("click", function () {
+            const value = $(this).data("value");
+
+            if (value === "clear") {
+                passcode.val("");
+            } else {
+                if (passcode.val().length < 6) {
+                    passcode.val(passcode.val() + value);
+                }
+
+                if (passcode.val().length === 6) {
+                    $('#hidPasscode').val(passcode.val());
+                }
+            }
+        });
+    });
+
+    const passwordField = document.getElementById('passcode');
+
+    passwordField.addEventListener('input', function (event) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    passwordField.addEventListener('keydown', function (event) {
+        if (
+            event.key === 'Backspace' ||
+            event.key === 'Delete' ||
+            event.key === 'ArrowUp' ||
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowLeft' ||
+            event.key === 'ArrowRight' ||
+            (event.key >= '0' && event.key <= '9')
+        ) {
+            return;
+        }
+        event.preventDefault();
+    });
+
+    function GetModalPopup()
+    {
+        $('#passcodeModal').modal('show');
+    }
+
+    function SavePasscode() {
+        $('#submitForm').click();
+    }
 </script>
+
+<style type="text/css">
+    .keypad-button {
+        width: 33.3333%;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .keypad-button:hover {
+        background-color: #f0f0f0;
+    }
+</style>

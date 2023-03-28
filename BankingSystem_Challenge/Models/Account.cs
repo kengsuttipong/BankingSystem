@@ -18,4 +18,5 @@ public partial class Account
     public double? Balance { get; set; }
 
     public DateTime? DateCreated { get; set; }
+    public string Passcode { get; set; }
 }
