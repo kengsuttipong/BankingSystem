@@ -54,7 +54,7 @@
                             <label asp-for="Amount" class="form-label">
                                 <i class="bi bi-cash-stack"></i> Amount
                             </label>
-                            <input type="number" class="form-control" asp-for="Amount">
+                            <input type="number" class="form-control" asp-for="Amount" step="0.01">
                             <span asp-validation-for="Amount" class="text-danger"></span>
                         </div>
                         <div class="d-grid gap-2">
